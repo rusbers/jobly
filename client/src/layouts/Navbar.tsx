@@ -5,9 +5,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { THEME_OPTIONS } from '@/contexts/ThemeProvider'
+import { THEME_OPTIONS } from '@/constants/constants'
 import useTheme from '@/hooks/useTheme'
-import { Moon, Sun } from 'lucide-react'
+import { Menu, Moon, Sun } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export function Navbar() {
@@ -17,7 +17,28 @@ export function Navbar() {
         <span className='text-lg'>Jobly</span>
         <div className='flex'>
           <ThemeToggleButton />
-          <NavItem to='/tasks' label='Task Board' />
+          <div className='hidden sm:flex'>
+            <NavItem to='/tasks' label='Task Board' />
+          </div>
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger className='flex sm:hidden' asChild>
+                <Button
+                  variant='ghost'
+                  size='icon'
+                  className='data-[state=open]:bg-slate-100 dark:data-[state=open]:bg-slate-800'
+                >
+                  <Menu className='w-5 h-5' />
+                  <span className='sr-only'>Mobile Menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end'>
+                <DropdownMenuItem asChild>
+                  <Link to='/tasks'>Task Board</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
     </nav>

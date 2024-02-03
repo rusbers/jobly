@@ -1,7 +1,6 @@
+import { THEME_OPTIONS } from '@/constants/constants'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { ReactNode, createContext } from 'react'
-
-export const THEME_OPTIONS = ['light', 'dark', 'system'] as const
 
 type Theme = (typeof THEME_OPTIONS)[number]
 
