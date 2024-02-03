@@ -5,6 +5,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { THEME_OPTIONS } from '@/contexts/ThemeProvider'
+import useTheme from '@/hooks/useTheme'
 import { Moon, Sun } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -38,6 +40,7 @@ function NavItem({ to, label }: NavItemProps) {
 }
 
 function ThemeToggleButton() {
+  const { setTheme } = useTheme()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -52,9 +55,11 @@ function ThemeToggleButton() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
-        <DropdownMenuItem>Light</DropdownMenuItem>
-        <DropdownMenuItem>Dark</DropdownMenuItem>
-        <DropdownMenuItem>System</DropdownMenuItem>
+        {THEME_OPTIONS.map((theme) => (
+          <DropdownMenuItem className='capitalize' key={theme} onClick={() => setTheme(theme)}>
+            {theme}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   )
