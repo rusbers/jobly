@@ -1,13 +1,14 @@
-import { Navigate, RouteObject } from "react-router-dom"
-import { RootLayout } from "@/layouts/RootLayout"
-import { ErrorPage } from "@/pages/ErrorPage"
-import { TaskListPage } from "@/pages/tasks/TaskListPage"
-import { NewTaskPage } from "@/pages/tasks/NewTaskPage"
-import { NotFoundPage } from "@/pages/NotFoundPage"
+import { Navigate, RouteObject } from 'react-router-dom'
+import { RootLayout } from '@/layouts/RootLayout'
+import { ErrorPage } from '@/pages/ErrorPage'
+import { TaskListPage } from '@/pages/tasks/TaskListPage'
+import { NewTaskPage } from '@/pages/tasks/NewTaskPage'
+import { NotFoundPage } from '@/pages/NotFoundPage'
+import { AuthLayout, SignupForm } from '@/features/authentication/index'
 
 export const routes: RouteObject[] = [
   {
-    path: "/",
+    path: '/',
     element: <RootLayout />,
     children: [
       {
@@ -15,16 +16,23 @@ export const routes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <Navigate to="/tasks" replace />,
+            element: <Navigate to='/tasks' replace />,
           },
           {
-            path: "tasks",
+            path: 'tasks',
             children: [
               { index: true, element: <TaskListPage /> },
-              { path: "new", element: <NewTaskPage /> },
+              { path: 'new', element: <NewTaskPage /> },
             ],
           },
-          { path: "*", element: <NotFoundPage /> },
+          {
+            element: <AuthLayout />,
+            children: [
+              // { path: 'login', element: <LoginForm /> },
+              { path: 'signup', element: <SignupForm /> },
+            ],
+          },
+          { path: '*', element: <NotFoundPage /> },
         ],
       },
     ],
