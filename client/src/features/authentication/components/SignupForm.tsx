@@ -12,9 +12,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { signupSchema } from '@backend/constants/schemas/users'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Link } from 'react-router-dom'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
+import { signup } from '../services/authentication'
+import { AxiosError } from 'axios'
 
 type SignupValues = z.infer<typeof formSchema>
 
@@ -31,7 +40,15 @@ export function SignupForm() {
     defaultValues: { email: '', password: '', passwordConfirmation: '' },
   })
 
-  const onSubmit = () => null
+  const onSubmit = async (values: SignupValues) => {
+    await signup(values.email, values.password).catch((error) => {
+      if (error instanceof AxiosError && error.response?.data?.message != null) {
+        form.setError('root', {
+          message: error.response.data.message,
+        })
+      }
+    })
+  }
 
   return (
     <Form {...form}>
@@ -39,7 +56,11 @@ export function SignupForm() {
         <Card className='w-[400px]'>
           <CardHeader>
             <CardTitle>Sign Up</CardTitle>
-            {/* TODO add error message */}
+            {form.formState.errors.root?.message && (
+              <CardDescription className='text-red-500 dark:text-red-900'>
+                {form.formState.errors.root.message}
+              </CardDescription>
+            )}
           </CardHeader>
           <CardContent className='flex flex-col w-full gap-4'>
             <FormField
