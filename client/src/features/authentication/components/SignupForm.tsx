@@ -22,8 +22,8 @@ import {
 } from '@/components/ui/card'
 import { Link } from 'react-router-dom'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
-import { signup } from '../services/authentication'
 import { AxiosError } from 'axios'
+import useAuth from '../hooks/useAuth'
 
 type SignupValues = z.infer<typeof formSchema>
 
@@ -35,6 +35,7 @@ const formSchema = signupSchema
   })
 
 export function SignupForm() {
+  const { signup } = useAuth()
   const form = useForm<SignupValues>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: '', password: '', passwordConfirmation: '' },
