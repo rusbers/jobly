@@ -1,9 +1,10 @@
-import { ReactNode, createContext, useState } from 'react'
+import { ReactNode, createContext, useEffect, useState } from 'react'
 import { User } from '../constants/types'
 import {
   signup as signupService,
   login as loginService,
   logout as logoutService,
+  getLoggedInUser,
 } from '../services/authentication'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { LogoutDialog } from '../components/LogoutDialog'
@@ -30,7 +31,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const navigate = useNavigate()
   const location = useLocation()
 
-  // TODO useEffect to load user
+  useEffect(() => {
+    setIsLoadingUser(true)
+    getLoggedInUser()
+      .then(setUser)
+      .finally(() => {
+        setIsLoadingUser(false)
+      })
+  }, [])
 
   const signup = (email: string, password: string) => {
     return signupService(email, password).then((user) => {

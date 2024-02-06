@@ -12,3 +12,7 @@ export function login(email: string, password: string) {
 export function logout() {
   return baseApi.delete('users/logout')
 }
+
+export function getLoggedInUser() {
+  return baseApi.get<User | undefined>('users/session').then((res) => res.data ?? undefined)
+}
