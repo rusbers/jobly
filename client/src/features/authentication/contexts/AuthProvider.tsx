@@ -10,7 +10,7 @@ type AuthProviderProps = {
 type AuthContext = {
   // login: (email: string, password: string) => Promise<void>
   signup: (email: string, password: string) => Promise<void>
-  // logout: () => Promise<void>
+  logout: () => Promise<void>
   isLoggedIn: boolean
   isLoadingUser: boolean
   user?: User
@@ -36,8 +36,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // TODO login
 
+  const logout = () => {
+    return Promise.resolve()
+  }
+
   return (
-    <Context.Provider value={{ user, isLoadingUser, signup, isLoggedIn: user !== null }}>
+    <Context.Provider value={{ user, isLoadingUser, signup, logout, isLoggedIn: user !== null }}>
       {children}
     </Context.Provider>
   )

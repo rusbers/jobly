@@ -23,7 +23,7 @@ import {
 import { Link } from 'react-router-dom'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 import { AxiosError } from 'axios'
-import useAuth from '../hooks/useAuth'
+import { useAuth } from '../hooks/useAuth'
 
 type SignupValues = z.infer<typeof formSchema>
 

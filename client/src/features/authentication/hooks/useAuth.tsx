@@ -1,7 +1,7 @@
 import { Context } from '@/features/authentication/contexts/AuthProvider'
 import { useContext } from 'react'
 
-export default function useAuth() {
+export function useAuth() {
   const auth = useContext(Context)
 
   if (auth === null) {

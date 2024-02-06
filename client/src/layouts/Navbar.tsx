@@ -3,14 +3,21 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { THEME_OPTIONS } from '@/constants/constants'
+import { useAuth } from '@/features/authentication'
 import useTheme from '@/hooks/useTheme'
-import { Menu, Moon, Sun } from 'lucide-react'
+import { ChevronDown, Menu, Moon, Sun } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export function Navbar() {
+  const { user, logout } = useAuth()
   return (
     <nav className='sticky top-0 z-10 border-b p-4 bg-white dark:bg-slate-950'>
       <div className='container flex items-center justify-between gap-4'>
@@ -19,6 +26,24 @@ export function Navbar() {
           <ThemeToggleButton />
           <div className='hidden sm:flex'>
             <NavItem to='/tasks' label='Task Board' />
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    className='data-[state=open]:bg-slate-100 dark:data-[state=open]:bg-slate-800'
+                  >
+                    <span className='mr-auto'>{user.email}</span>
+                    <ChevronDown className='w-4 h-4 ml-2' />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <NavItem to='/login' label='Login' />
+            )}
           </div>
           <div>
             <DropdownMenu>
@@ -36,6 +61,24 @@ export function Navbar() {
                 <DropdownMenuItem asChild>
                   <Link to='/tasks'>Task Board</Link>
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {user ? (
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger asChild>
+                      <span>{user.email}</span>
+                      <ChevronDown className='w-4 h-4 ml-2' />
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                ) : (
+                  <DropdownMenuItem asChild>
+                    <Link to='/login'>Login</Link>
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
