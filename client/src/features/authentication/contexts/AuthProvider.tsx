@@ -1,7 +1,12 @@
 import { ReactNode, createContext, useState } from 'react'
 import { User } from '../constants/types'
-import { signup as signupService, login as loginService } from '../services/authentication'
+import {
+  signup as signupService,
+  login as loginService,
+  logout as logoutService,
+} from '../services/authentication'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { LogoutDialog } from '../components/LogoutDialog'
 
 type AuthProviderProps = {
   children: ReactNode
@@ -21,7 +26,7 @@ export const Context = createContext<AuthContext | null>(null)
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>()
   const [isLoadingUser, setIsLoadingUser] = useState<boolean>(true)
-
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -42,7 +47,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   const logout = () => {
-    return Promise.resolve()
+    setIsLogoutModalOpen(true)
+    return logoutService()
+      .then(() => {
+        setUser(undefined)
+      })
+      .finally(() => {
+        setIsLogoutModalOpen(false)
+      })
   }
 
   return (
@@ -50,6 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       value={{ user, isLoadingUser, signup, login, logout, isLoggedIn: user !== null }}
     >
       {children}
+      <LogoutDialog isOpen={isLogoutModalOpen} onOpenChange={setIsLogoutModalOpen} />
     </Context.Provider>
   )
 }
