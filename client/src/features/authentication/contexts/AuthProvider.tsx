@@ -1,14 +1,14 @@
 import { ReactNode, createContext, useState } from 'react'
 import { User } from '../constants/types'
-import { signup as signupService } from '../services/authentication'
-import { useNavigate } from 'react-router-dom'
+import { signup as signupService, login as loginService } from '../services/authentication'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 type AuthProviderProps = {
   children: ReactNode
 }
 
 type AuthContext = {
-  // login: (email: string, password: string) => Promise<void>
+  login: (email: string, password: string) => Promise<void>
   signup: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
   isLoggedIn: boolean
@@ -23,25 +23,32 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoadingUser, setIsLoadingUser] = useState<boolean>(true)
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   // TODO useEffect to load user
 
   const signup = (email: string, password: string) => {
     return signupService(email, password).then((user) => {
       setUser(user)
-      // TODO to implement user permission handling
-      navigate('/')
+      navigate(location.state?.location ?? '/')
     })
   }
 
-  // TODO login
+  const login = (email: string, password: string) => {
+    return loginService(email, password).then((user) => {
+      setUser(user)
+      navigate(location.state?.location ?? '/')
+    })
+  }
 
   const logout = () => {
     return Promise.resolve()
   }
 
   return (
-    <Context.Provider value={{ user, isLoadingUser, signup, logout, isLoggedIn: user !== null }}>
+    <Context.Provider
+      value={{ user, isLoadingUser, signup, login, logout, isLoggedIn: user !== null }}
+    >
       {children}
     </Context.Provider>
   )
