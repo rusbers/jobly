@@ -6,3 +6,9 @@ import { jobListingSchema } from '../constants/schemas'
 export function createJobListing(data: z.infer<typeof jobListingFormSchema>) {
   return baseApi.post('/job-listings', data).then((res) => jobListingSchema.parseAsync(res.data))
 }
+
+export function getAllMyListings() {
+  return baseApi
+    .get('/job-listings/my-listings')
+    .then((res) => z.array(jobListingSchema).parseAsync(res.data))
+}
