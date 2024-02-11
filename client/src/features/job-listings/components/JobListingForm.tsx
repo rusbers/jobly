@@ -40,15 +40,15 @@ const DEFAULT_VALUES: JobListingValues = {
   description: '',
 }
 
-export function JobListingForm() {
+type JobListingFormProps = {
+  onSubmit: (values: JobListingValues) => void
+}
+
+export function JobListingForm({ onSubmit }: JobListingFormProps) {
   const form = useForm<JobListingValues>({
     resolver: zodResolver(jobListingFormSchema),
     defaultValues: DEFAULT_VALUES,
   })
-
-  const onSubmit = async (values: JobListingValues) => {
-    // TODO implement submit function
-  }
 
   return (
     <Form {...form}>
