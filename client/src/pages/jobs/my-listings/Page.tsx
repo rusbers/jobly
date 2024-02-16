@@ -4,6 +4,7 @@ import { Await, useDefferedLoaderData } from '@/lib/reactRouter'
 import { Link } from 'react-router-dom'
 import { loader } from './loader'
 import { Suspense } from 'react'
+import { JobListingSkeletonGrid, MyJobListingsGrid } from '@/features/job-listings'
 
 export function MyJobListingsPage() {
   const { jobListingsPromise } = useDefferedLoaderData<typeof loader>()
@@ -18,8 +19,10 @@ export function MyJobListingsPage() {
       >
         My Job Listings
       </PageHeader>
-      <Suspense fallback={'Loading ...'}>
-        <Await resolve={jobListingsPromise}>{(jobListings) => jobListings?.length}</Await>
+      <Suspense fallback={<JobListingSkeletonGrid />}>
+        <Await resolve={jobListingsPromise}>
+          {(jobListings) => <MyJobListingsGrid jobListings={jobListings} />}
+        </Await>
       </Suspense>
     </>
   )
