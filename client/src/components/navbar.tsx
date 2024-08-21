@@ -7,37 +7,38 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Button } from './ui/button'
-import { Moon, Sun, Menu, ChevronDown } from 'lucide-react'
-import { HTMLAttributes } from 'react'
-import { cn } from '@/utils/shadcnUtils'
-import { Link } from 'react-router-dom'
+} from "@/components/ui/dropdown-menu"
+import { Button } from "./ui/button"
+import { Menu, ChevronDown } from "lucide-react"
+import { HTMLAttributes } from "react"
+import { cn } from "@/utils/shadcnUtils"
+import { Link } from "react-router-dom"
+import ThemeToggleButton from "./theme-toggle-button"
 
 const MAIN_NAV_LINKS = [
   {
-    label: 'Task Board',
-    path: '#',
+    label: "Task Board",
+    path: "#",
   },
   {
-    label: 'Job Listings',
-    path: '#',
+    label: "Job Listings",
+    path: "#",
   },
 ]
 
 const USER_NAV_LINKS = [
   {
-    label: 'My Listings',
-    path: '#',
+    label: "My Listings",
+    path: "#",
   },
 ]
 
 type MainNavbarProps = HTMLAttributes<HTMLDivElement>
 
 export default function MainNavbar({ className }: MainNavbarProps) {
-  const userEmail = 'test@test.com'
+  const userEmail = "test@test.com"
   return (
-    <nav className={cn('flex flex-wrap items-center justify-between py-4 border-b', className)}>
+    <nav className={cn("flex flex-wrap items-center justify-between py-4 border-b", className)}>
       <a className='text-2xl' href='/'>
         WDS App
       </a>
@@ -55,19 +56,19 @@ export default function MainNavbar({ className }: MainNavbarProps) {
 function NavMenu({ email }: { email: string }) {
   return (
     <>
-      <ul className={'hidden md:flex flex-wrap gap-4'}>
+      <ul className={"hidden md:flex flex-wrap gap-4"}>
         {MAIN_NAV_LINKS.map((item, index) => (
           <li key={index}>
-            <Button asChild variant={'ghost'}>
+            <Button asChild variant={"ghost"}>
               <Link to={item.path}>{item.label}</Link>
             </Button>
           </li>
         ))}
       </ul>
-      <div className={'hidden md:block'}>
+      <div className={"hidden md:block"}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={'ghost'}>
+            <Button variant={"ghost"}>
               {email}
               <ChevronDown className='size-4 ml-2' />
             </Button>
@@ -92,7 +93,7 @@ function MobileNavMenu({ email }: { email: string }) {
     <div className='md:hidden'>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size={'icon'} variant={'ghost'}>
+          <Button size={"icon"} variant={"ghost"}>
             <Menu aria-hidden />
           </Button>
         </DropdownMenuTrigger>
@@ -120,22 +121,5 @@ function MobileNavMenu({ email }: { email: string }) {
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  )
-}
-
-function ThemeToggleButton() {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button size={'icon'} variant={'ghost'}>
-          <Moon aria-hidden />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
-        <DropdownMenuItem>Light</DropdownMenuItem>
-        <DropdownMenuItem>Dark</DropdownMenuItem>
-        <DropdownMenuItem>System</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
   )
 }
