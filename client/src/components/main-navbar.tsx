@@ -14,6 +14,7 @@ import { HTMLAttributes } from "react"
 import { cn } from "@/utils/shadcnUtils"
 import { Link } from "react-router-dom"
 import ThemeToggleButton from "./theme-toggle-button"
+import { type User, useAuthContext } from "@/features/auth"
 
 const MAIN_NAV_LINKS = [
   {
@@ -35,26 +36,32 @@ const USER_NAV_LINKS = [
 
 type MainNavbarProps = HTMLAttributes<HTMLDivElement>
 
-export default function MainNavbar({ className }: MainNavbarProps) {
-  const { isLoggedIn, email } = { isLoggedIn: true, email: "test@test.com" }
+export function MainNavbar({ className }: MainNavbarProps) {
+  const { isLoggedIn, user, logout } = useAuthContext()
 
   return (
-    <nav className={cn("flex flex-wrap items-center justify-between py-4 border-b", className)}>
-      <a className='text-2xl' href='/'>
+    <nav className={cn("flex flex-wrap items-center justify-between", className)}>
+      <Link className='text-2xl' to='/'>
         WDS App
-      </a>
+      </Link>
       <div className='flex flex-wrap gap-4'>
         <ThemeToggleButton />
 
-        <NavMenu isLoggedIn={isLoggedIn} email={email} />
+        <NavMenu isLoggedIn={isLoggedIn} user={user} logout={logout} />
 
-        <MobileNavMenu isLoggedIn={isLoggedIn} email={email} />
+        <MobileNavMenu isLoggedIn={isLoggedIn} user={user} logout={logout} />
       </div>
     </nav>
   )
 }
 
-function NavMenu({ isLoggedIn, email }: { isLoggedIn: boolean; email: string }) {
+type MenuCommonProps = {
+  isLoggedIn: boolean
+  user: User | undefined
+  logout: () => Promise<void>
+}
+
+function NavMenu({ isLoggedIn, user, logout }: MenuCommonProps) {
   return (
     <>
       <ul className={"hidden md:flex flex-wrap gap-4"}>
@@ -71,29 +78,33 @@ function NavMenu({ isLoggedIn, email }: { isLoggedIn: boolean; email: string }) 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"ghost"}>
-                {email}
+                {user?.email}
                 <ChevronDown className='size-4 ml-2' />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent sideOffset={5} alignOffset={-5}>
+            <DropdownMenuContent className='z-[100]' sideOffset={5} alignOffset={-5}>
               {USER_NAV_LINKS.map((link, index) => (
                 <DropdownMenuItem asChild key={index}>
                   <Link to={link.path}>{link.label}</Link>
                 </DropdownMenuItem>
               ))}
               <DropdownMenuSeparator />
-              <DropdownMenuItem className='text-red-600'>Logout</DropdownMenuItem>
+              <DropdownMenuItem className='text-red-600' onClick={logout}>
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Button variant={"ghost"}>Login</Button>
+          <Button asChild variant={"ghost"}>
+            <Link to='/auth/login'>Login</Link>
+          </Button>
         )}
       </div>
     </>
   )
 }
 
-function MobileNavMenu({ isLoggedIn, email }: { isLoggedIn: boolean; email: string }) {
+function MobileNavMenu({ isLoggedIn, user, logout }: MenuCommonProps) {
   return (
     <div className='md:hidden'>
       <DropdownMenu>
@@ -102,7 +113,7 @@ function MobileNavMenu({ isLoggedIn, email }: { isLoggedIn: boolean; email: stri
             <Menu aria-hidden />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
+        <DropdownMenuContent className='z-[100]' align='end'>
           {MAIN_NAV_LINKS.map((link, index) => (
             <DropdownMenuItem key={index}>
               <Link to={link.path}>{link.label}</Link>
@@ -112,21 +123,25 @@ function MobileNavMenu({ isLoggedIn, email }: { isLoggedIn: boolean; email: stri
           {isLoggedIn ? (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger asChild>
-                <span className='mr-auto'>{email}</span>
+                <span className='mr-auto'>{user?.email}</span>
                 <ChevronDown className='size-4 ml-2' />
               </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent sideOffset={5} alignOffset={-5}>
+              <DropdownMenuSubContent className='z-[100]' sideOffset={5} alignOffset={-5}>
                 {USER_NAV_LINKS.map((link, index) => (
                   <DropdownMenuItem asChild key={index}>
                     <Link to={link.path}>{link.label}</Link>
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className='text-red-600'>Logout</DropdownMenuItem>
+                <DropdownMenuItem className='text-red-600' onClick={logout}>
+                  Logout
+                </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
           ) : (
-            <DropdownMenuItem>Login</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to='/auth/login'>Login</Link>
+            </DropdownMenuItem>
           )}
         </DropdownMenuContent>
       </DropdownMenu>

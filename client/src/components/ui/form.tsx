@@ -1,13 +1,7 @@
 import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
-import {
-  Controller,
-  ControllerProps,
-  FieldPath,
-  FieldValues,
-  FormProvider,
-} from "react-hook-form"
+import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider } from "react-hook-form"
 
 import { cn } from "@/utils/shadcnUtils"
 import { Label } from "@/components/ui/label"
@@ -43,38 +37,28 @@ type FormItemContextValue = {
   id: string
 }
 
-export const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue
+export const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue)
+
+const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => {
+    const id = React.useId()
+
+    return (
+      <FormItemContext.Provider value={{ id }}>
+        <div ref={ref} className={cn("space-y-2", className)} {...props} />
+      </FormItemContext.Provider>
+    )
+  }
 )
-
-const FormItem = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-  const id = React.useId()
-
-  return (
-    <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
-    </FormItemContext.Provider>
-  )
-})
 FormItem.displayName = "FormItem"
 
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
 >(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormField()
+  const { formItemId } = useFormField()
 
-  return (
-    <Label
-      ref={ref}
-      className={cn(error && "text-red-500 dark:text-red-900", className)}
-      htmlFor={formItemId}
-      {...props}
-    />
-  )
+  return <Label ref={ref} className={className} htmlFor={formItemId} {...props} />
 })
 FormLabel.displayName = "FormLabel"
 
@@ -88,11 +72,7 @@ const FormControl = React.forwardRef<
     <Slot
       ref={ref}
       id={formItemId}
-      aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
-      }
+      aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
       aria-invalid={!!error}
       {...props}
     />
@@ -132,10 +112,7 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn(
-        "text-sm font-medium text-red-500 dark:text-red-900",
-        className
-      )}
+      className={cn("text-sm font-medium text-red-500", className)}
       {...props}
     >
       {body}
@@ -144,12 +121,4 @@ const FormMessage = React.forwardRef<
 })
 FormMessage.displayName = "FormMessage"
 
-export {
-  Form,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-  FormField,
-}
+export { Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField }

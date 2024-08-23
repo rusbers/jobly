@@ -1,13 +1,15 @@
-import Navbar from '@/components/navbar'
-import { Toaster } from '@/components/ui/toaster'
-import { Outlet, ScrollRestoration } from 'react-router-dom'
+import { AppHeader } from "@/components/app-header"
+import { Toaster } from "@/components/ui/toaster"
+import { AuthContextProvider } from "@/features/auth"
+import { Outlet, ScrollRestoration } from "react-router-dom"
 
 export function RootLayout() {
   return (
-    <>
-      <Navbar className='container' />
+    <AuthContextProvider>
       <div className='flex flex-col min-h-screen'>
-        <div className='container my-4 flex-grow grid grid-cols-1'>
+        <AppHeader className='container' />
+
+        <div className='container py-4 flex-grow grid grid-cols-1'>
           <div>
             <Outlet />
           </div>
@@ -15,6 +17,6 @@ export function RootLayout() {
       </div>
       <ScrollRestoration />
       <Toaster />
-    </>
+    </AuthContextProvider>
   )
 }
