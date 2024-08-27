@@ -12,6 +12,7 @@ import { PrivateRoutes } from "./components/private-routes"
 import { myJobListingsRoute } from "./pages/job-listings/my-listings"
 import { editMyListingRoute } from "./pages/job-listings/edit"
 import { newJobListingRoute } from "./pages/job-listings/new"
+import { orderCompletedRoute } from "./pages/job-listings/order-completed"
 
 export const routes: RouteObject[] = [
   {
@@ -57,6 +58,11 @@ export const routes: RouteObject[] = [
                     ],
                   },
                 ],
+              },
+              {
+                path: "order-completed",
+                element: <PrivateRoutes />,
+                children: [{ index: true, ...orderCompletedRoute }],
               },
             ],
           },
