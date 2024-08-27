@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useState, useEffect } from "react"
 import { User } from "../constants/types"
 import { loginService, signupService, logoutService, userSessionService } from "../services/auth"
 import { useLocation, useNavigate } from "react-router-dom"

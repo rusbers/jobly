@@ -7,6 +7,11 @@ import { NotFoundPage } from "@/pages/NotFoundPage"
 import LoginPage from "./pages/auth/LoginPage"
 import SignupPage from "./pages/auth/SignupPage"
 import { AuthLayout } from "./features/auth"
+import JobListingsPage from "./pages/job-listings/index/JobListingsPage"
+import { PrivateRoutes } from "./components/private-routes"
+import { myJobListingsRoute } from "./pages/job-listings/my-listings"
+import { editMyListingRoute } from "./pages/job-listings/edit"
+import { newJobListingRoute } from "./pages/job-listings/new"
 
 export const routes: RouteObject[] = [
   {
@@ -34,6 +39,25 @@ export const routes: RouteObject[] = [
               { index: true, element: <Navigate to='/auth/login' /> },
               { path: "login", element: <LoginPage /> },
               { path: "signup", element: <SignupPage /> },
+            ],
+          },
+          {
+            path: "job-listings",
+            children: [
+              { index: true, element: <JobListingsPage /> },
+              {
+                element: <PrivateRoutes />,
+                children: [
+                  {
+                    path: "my-listings",
+                    children: [
+                      { index: true, ...myJobListingsRoute },
+                      { path: "new", ...newJobListingRoute },
+                      { path: "edit/:id", ...editMyListingRoute },
+                    ],
+                  },
+                ],
+              },
             ],
           },
           { path: "*", element: <NotFoundPage /> },

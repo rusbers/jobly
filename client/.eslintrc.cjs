@@ -25,6 +25,7 @@ module.exports = {
   },
   rules: {
     "react-refresh/only-export-components": "warn",
+    "no-non-null-assertion": false,
     "import/no-restricted-paths": [
       "error",
       {
@@ -33,8 +34,7 @@ module.exports = {
           {
             target: ["./!(features)/**/*", "./!(features)*"],
             from: ["./features/*/!(index.*)", "./features/*/!(index.*)/**/*"],
-            message:
-              "Cannot import anything except the index file within a feature folder",
+            message: "Cannot import anything except the index file within a feature folder",
           },
         ],
       },

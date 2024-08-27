@@ -1,9 +1,5 @@
 import z from "zod"
-import {
-  JOB_LISTING_TYPES,
-  JOB_LISTING_EXPERIENCE_LEVELS,
-  JOB_LISTING_DURATIONS,
-} from "../types"
+import { JOB_LISTING_TYPES, JOB_LISTING_EXPERIENCE_LEVELS, JOB_LISTING_DURATIONS } from "../types"
 import { createUnionSchema } from "../../lib/zodCreateUnionSchema"
 
 export const jobListingFormSchema = z.object({

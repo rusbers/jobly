@@ -19,18 +19,18 @@ import { type User, useAuthContext } from "@/features/auth"
 const MAIN_NAV_LINKS = [
   {
     label: "Task Board",
-    path: "#",
+    path: "/",
   },
   {
     label: "Job Listings",
-    path: "#",
+    path: "/job-listings",
   },
 ]
 
 const USER_NAV_LINKS = [
   {
     label: "My Listings",
-    path: "#",
+    path: "/job-listings/my-listings",
   },
 ]
 
