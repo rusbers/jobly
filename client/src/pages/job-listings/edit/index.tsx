@@ -1,8 +1,9 @@
-import type { Params } from "react-router-dom"
+import { defer, type Params } from "react-router-dom"
 import EditListingPage from "./EditListingPage"
 import { getJobListing } from "@/features/listings"
 
 export const editMyListingRoute = {
-  loader: ({ params }: { params: Params<"id"> }) => getJobListing(params.id!),
+  loader: ({ params }: { params: Params<"id"> }) =>
+    defer({ jobListingPromise: getJobListing(params.id!) }),
   element: <EditListingPage />,
 }

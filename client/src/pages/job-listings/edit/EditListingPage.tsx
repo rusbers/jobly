@@ -1,11 +1,18 @@
 import { PageHeader } from "@/components/ui/PageHeader"
-import { type JobListing, JobListingForm, JobListingFormValues, editJobListing } from "@/features/listings"
-import { Params, useLoaderData, useNavigate, useParams } from "react-router-dom"
+import {
+  type JobListing,
+  JobListingForm,
+  JobListingFormSkeleton,
+  JobListingFormValues,
+  editJobListing,
+} from "@/features/listings"
+import { Await, Params, useLoaderData, useNavigate, useParams } from "react-router-dom"
 import { useToast } from "@/components/ui/use-toast"
+import { Suspense } from "react"
 
 export default function EditListingPage() {
   const params = useParams() as Params<"id">
-  const listingData = useLoaderData() as JobListing
+  const { jobListingPromise } = useLoaderData() as { jobListingPromise: Promise<JobListing> }
   const navigate = useNavigate()
   const { toast } = useToast()
 
@@ -24,7 +31,13 @@ export default function EditListingPage() {
   return (
     <>
       <PageHeader>Edit Listing</PageHeader>
-      <JobListingForm initialJobListings={listingData} onSubmit={onSubmit} />
+      <Suspense fallback={<JobListingFormSkeleton />}>
+        <Await resolve={jobListingPromise}>
+          {(jobListing: JobListing) => (
+            <JobListingForm initialJobListings={jobListing} onSubmit={onSubmit} />
+          )}
+        </Await>
+      </Suspense>
     </>
   )
 }

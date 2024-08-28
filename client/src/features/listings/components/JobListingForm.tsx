@@ -1,10 +1,23 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { generatePreviewJobListingPlaceholders } from "../utils/listingUtils"
 import { JOB_LISTING_TYPES, JOB_LISTING_EXPERIENCE_LEVELS } from "@backend/constants/types"
 import { jobListingFormSchema } from "@backend/constants/schemas/jobListings"
@@ -30,7 +43,10 @@ type JobListingFormProps = {
   initialJobListings?: JobListingFormValues
 }
 
-export function JobListingForm({ onSubmit, initialJobListings = DEFAULT_FORM_VALUES }: JobListingFormProps) {
+export function JobListingForm({
+  onSubmit,
+  initialJobListings = DEFAULT_FORM_VALUES,
+}: JobListingFormProps) {
   const form = useForm<JobListingFormValues>({
     resolver: zodResolver(jobListingFormSchema),
     defaultValues: initialJobListings,
@@ -175,8 +191,12 @@ export function JobListingForm({ onSubmit, initialJobListings = DEFAULT_FORM_VAL
             >
               {showPreview ? "Hide Preview" : "Show Preview"}
             </Button>
-            <Button disabled={form.formState.isSubmitting} type='submit' className='w-full md:w-auto'>
-              Save
+            <Button
+              disabled={form.formState.isSubmitting}
+              type='submit'
+              className='w-full md:w-auto'
+            >
+              {form.formState.isSubmitting ? "Saving..." : "Save"}
             </Button>
           </div>
         </form>

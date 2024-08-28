@@ -1,7 +1,11 @@
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Link, useLocation } from "react-router-dom"
-import { getDaysRemainingText, getJobListingBadgeVariant, getJobListingStatus } from "../utils/listingUtils"
+import {
+  getDaysRemainingText,
+  getJobListingBadgeVariant,
+  getJobListingStatus,
+} from "../utils/listingUtils"
 import { JobListing } from "../constants/types"
 import { JobListingCard } from "./JobListingCard"
 import { DeleteListingDialog } from "./DeleteListingDialog"
@@ -12,7 +16,7 @@ export function MyJobListingCard({
   onDelete,
 }: {
   jobListing: JobListing
-  onDelete: () => Promise<void>
+  onDelete: () => void
 }) {
   const status = getJobListingStatus(jobListing.expiresAt)
 
@@ -22,7 +26,9 @@ export function MyJobListingCard({
       topDetails={
         <Badge variant={getJobListingBadgeVariant(status)} className='rounded'>
           {status}
-          {status === "Active" && jobListing.expiresAt && ` - ${getDaysRemainingText(jobListing.expiresAt)}`}
+          {status === "Active" &&
+            jobListing.expiresAt &&
+            ` - ${getDaysRemainingText(jobListing.expiresAt)}`}
         </Badge>
       }
       mainActions={

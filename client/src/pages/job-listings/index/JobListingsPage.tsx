@@ -7,13 +7,17 @@ import {
   PublishedJobListingCard,
   useJobListingFilterForm,
 } from "@/features/listings"
-import { Link, useLoaderData } from "react-router-dom"
+import { Link, useLoaderData, Await } from "react-router-dom"
 import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { useToast } from "@/components/ui/use-toast"
 import { ToastAction } from "@/components/ui/toast"
+import { Suspense } from "react"
+import { JobListingCardSkeleton } from "@/features/listings"
 
 export default function JobListingsPage() {
-  const publishedJobListings = useLoaderData() as JobListing[]
+  const { publishedListingsPromise } = useLoaderData() as {
+    publishedListingsPromise: Promise<JobListing[]>
+  }
   const [hiddenJobListingIds, setHiddenJobListingIds] = useLocalStorage<string[]>(
     "hiddenJobListingsIds",
     []
@@ -23,11 +27,6 @@ export default function JobListingsPage() {
     []
   )
   const { form, getFilteredJobs } = useJobListingFilterForm()
-  const filteredJobs = getFilteredJobs(
-    publishedJobListings,
-    hiddenJobListingIds,
-    favoriteJobListingIds
-  )
   const { toast } = useToast()
 
   const toggleFavorite = (listingId: string) => {
@@ -68,22 +67,38 @@ export default function JobListingsPage() {
           </Button>
         }
       >
-        My Job Listings
+        Job Listings
       </PageHeader>
 
       <JobListingFilterForm className='mb-12' form={form} />
 
       <JobListingsGrid>
-        {filteredJobs.map((jobListing) => (
-          <PublishedJobListingCard
-            key={jobListing.id}
-            jobListing={jobListing}
-            isFavorite={favoriteJobListingIds.includes(jobListing.id)}
-            isHidden={hiddenJobListingIds.includes(jobListing.id)}
-            onToggleFavorite={toggleFavorite}
-            onToggleHide={toggleHide}
-          />
-        ))}
+        <Suspense
+          fallback={Array.from({ length: 6 }).map((_, i) => (
+            <JobListingCardSkeleton key={i} />
+          ))}
+        >
+          <Await resolve={publishedListingsPromise}>
+            {(publishedListings: JobListing[]) => {
+              const filteredJobListings = getFilteredJobs(
+                publishedListings,
+                hiddenJobListingIds,
+                favoriteJobListingIds
+              )
+
+              return filteredJobListings.map((jobListing) => (
+                <PublishedJobListingCard
+                  key={jobListing.id}
+                  jobListing={jobListing}
+                  isFavorite={favoriteJobListingIds.includes(jobListing.id)}
+                  isHidden={hiddenJobListingIds.includes(jobListing.id)}
+                  onToggleFavorite={toggleFavorite}
+                  onToggleHide={toggleHide}
+                />
+              ))
+            }}
+          </Await>
+        </Suspense>
       </JobListingsGrid>
     </>
   )

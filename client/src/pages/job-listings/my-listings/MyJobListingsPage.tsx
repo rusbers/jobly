@@ -2,25 +2,22 @@ import { Button } from "@/components/ui/button"
 import { PageHeader } from "@/components/ui/PageHeader"
 import {
   type JobListing,
+  JobListingCardSkeleton,
   JobListingsGrid,
   MyJobListingCard,
   sortJobListings,
 } from "@/features/listings"
-import { Link, useLoaderData } from "react-router-dom"
+import { Await, Link, useAsyncValue, useLoaderData } from "react-router-dom"
 import { deleteJobListing } from "@/features/listings"
-import { useMemo, useState } from "react"
+import { Suspense, useMemo, useState } from "react"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function MyJobListingsPage() {
-  const myJobListings = useLoaderData() as JobListing[]
+  const { myJobListingsPromise } = useLoaderData() as {
+    myJobListingsPromise: Promise<JobListing[]>
+  }
   const [deletedListingsIds, setDeletedListingsIds] = useState<string[]>([])
   const { toast } = useToast()
-
-  const visibleJobListings = useMemo(() => {
-    return myJobListings
-      .filter((jobListing) => !deletedListingsIds.includes(jobListing.id))
-      .sort(sortJobListings)
-  }, [myJobListings, deletedListingsIds])
 
   const deleteListing = async (id: string) => {
     try {
@@ -52,14 +49,39 @@ export default function MyJobListingsPage() {
       </PageHeader>
 
       <JobListingsGrid>
-        {visibleJobListings.map((jobListing) => (
-          <MyJobListingCard
-            key={jobListing.id}
-            jobListing={jobListing}
-            onDelete={() => deleteListing(jobListing.id)}
-          />
-        ))}
+        <Suspense
+          fallback={Array.from({ length: 6 }).map((_, i) => (
+            <JobListingCardSkeleton key={i} />
+          ))}
+        >
+          <Await resolve={myJobListingsPromise}>
+            <MyJobListings deletedListingsIds={deletedListingsIds} onDelete={deleteJobListing} />
+          </Await>
+        </Suspense>
       </JobListingsGrid>
     </>
   )
+}
+
+type MyJobListingsProps = {
+  deletedListingsIds: string[]
+  onDelete: (id: string) => void
+}
+
+function MyJobListings({ deletedListingsIds, onDelete }: MyJobListingsProps) {
+  const jobListings = useAsyncValue() as JobListing[]
+
+  const visibleJobListings = useMemo(() => {
+    return jobListings
+      .filter((jobListing) => !deletedListingsIds.includes(jobListing.id))
+      .sort(sortJobListings)
+  }, [jobListings, deletedListingsIds])
+
+  return visibleJobListings.map((jobListing) => (
+    <MyJobListingCard
+      key={jobListing.id}
+      jobListing={jobListing}
+      onDelete={() => onDelete(jobListing.id)}
+    />
+  ))
 }
