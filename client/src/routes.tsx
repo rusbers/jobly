@@ -7,12 +7,12 @@ import { NotFoundPage } from "@/pages/NotFoundPage"
 import LoginPage from "./pages/auth/LoginPage"
 import SignupPage from "./pages/auth/SignupPage"
 import { AuthLayout } from "./features/auth"
-import JobListingsPage from "./pages/job-listings/index/JobListingsPage"
 import { PrivateRoutes } from "./components/private-routes"
 import { myJobListingsRoute } from "./pages/job-listings/my-listings"
 import { editMyListingRoute } from "./pages/job-listings/edit"
 import { newJobListingRoute } from "./pages/job-listings/new"
 import { orderCompletedRoute } from "./pages/job-listings/order-completed"
+import { publishedJobListingsRoute } from "./pages/job-listings/index"
 
 export const routes: RouteObject[] = [
   {
@@ -45,7 +45,7 @@ export const routes: RouteObject[] = [
           {
             path: "job-listings",
             children: [
-              { index: true, element: <JobListingsPage /> },
+              { index: true, ...publishedJobListingsRoute },
               {
                 element: <PrivateRoutes />,
                 children: [

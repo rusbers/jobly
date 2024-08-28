@@ -1,6 +1,11 @@
 import { Button } from "@/components/ui/button"
 import { PageHeader } from "@/components/ui/PageHeader"
-import { type JobListing, MyJobListingCard, sortJobListings } from "@/features/listings"
+import {
+  type JobListing,
+  JobListingsGrid,
+  MyJobListingCard,
+  sortJobListings,
+} from "@/features/listings"
 import { Link, useLoaderData } from "react-router-dom"
 import { deleteJobListing } from "@/features/listings"
 import { useMemo, useState } from "react"
@@ -46,7 +51,7 @@ export default function MyJobListingsPage() {
         My Job Listings
       </PageHeader>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+      <JobListingsGrid>
         {visibleJobListings.map((jobListing) => (
           <MyJobListingCard
             key={jobListing.id}
@@ -54,7 +59,7 @@ export default function MyJobListingsPage() {
             onDelete={() => deleteListing(jobListing.id)}
           />
         ))}
-      </div>
+      </JobListingsGrid>
     </>
   )
 }

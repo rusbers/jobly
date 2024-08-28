@@ -1,21 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { MarkdownRenderer } from "@/components/ui/MarkdownRenderer"
-import { ExternalLink as ExternalLinkIcon } from "lucide-react"
-import { cn } from "@/utils/shadcnUtils"
 import { generatePreviewJobListingPlaceholders } from "../utils/listingUtils"
 import { JOB_LISTING_TYPES, JOB_LISTING_EXPERIENCE_LEVELS } from "@backend/constants/types"
 import { jobListingFormSchema } from "@backend/constants/schemas/jobListings"
-import { BadgeGroup } from "./BadgeGroup"
 import { JobListingCard } from "./JobListingCard"
 import { JobListingFormValues } from "../constants/types"
 import { useState } from "react"
+import { ViewMoreModal } from "./ViewMoreModal"
 
 const DEFAULT_FORM_VALUES: JobListingFormValues = {
   title: "",
@@ -207,7 +203,12 @@ type JobListingFormSelectorProps = {
   onValueChange: () => void
 }
 
-function JobListingFormSelector({ label, values, defaultValue, onValueChange }: JobListingFormSelectorProps) {
+export function JobListingFormSelector({
+  label,
+  values,
+  defaultValue,
+  onValueChange,
+}: JobListingFormSelectorProps) {
   return (
     <FormItem>
       <FormLabel>{label}</FormLabel>
@@ -243,46 +244,5 @@ function PreviewJobListingCard({ currentValues, onOpenViewModal }: PreviewCardPr
       jobListing={jobListingData}
       mainActions={<Button onClick={onOpenViewModal}>View More</Button>}
     />
-  )
-}
-
-type ViewMoreModalProps = {
-  open: boolean
-  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
-  currentValues: JobListingFormValues
-}
-
-function ViewMoreModal({ open, onOpenChange, currentValues }: ViewMoreModalProps) {
-  const listingData = generatePreviewJobListingPlaceholders(currentValues)
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-h-[95%] overflow-hidden flex flex-col max-w-[95%] lg:max-w-[70%]'>
-        <DialogHeader>
-          <DialogTitle>{listingData.title}</DialogTitle>
-          <DialogDescription>{listingData.companyName}</DialogDescription>
-          <DialogDescription>{listingData.location}</DialogDescription>
-
-          <BadgeGroup
-            salary={listingData.salary}
-            type={listingData.type}
-            experienceLevel={listingData.experienceLevel}
-          />
-        </DialogHeader>
-
-        <a
-          className={cn("max-w-64 gap-4 inline-flex items-center", buttonVariants())}
-          href={listingData.applyUrl}
-          target='_blank'
-        >
-          Apply On Company Site
-          <ExternalLinkIcon className='size-5' />
-        </a>
-
-        <div className='flex-1 overflow-y-auto'>
-          <MarkdownRenderer>{listingData.description}</MarkdownRenderer>
-        </div>
-      </DialogContent>
-    </Dialog>
   )
 }

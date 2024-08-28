@@ -39,3 +39,9 @@ export async function createPublishPaymentIntent(
   )
   return res.data
 }
+
+export async function getAllPublishedListings() {
+  const res = await baseApi.get("/job-listings/published")
+
+  return await z.array(jobListingSchema).parseAsync(res.data)
+}
