@@ -1,8 +1,7 @@
-import { JOB_LISTING_EXPERIENCE_LEVELS, JOB_LISTING_TYPES } from "@backend/constants/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { JobListing } from "../constants/types"
+import { JOB_LISTING_EXPERIENCE_LEVELS, JOB_LISTING_TYPES, JobListing } from "../constants/types"
 
 const jobListingFilterSchema = z.object({
   title: z.string(),

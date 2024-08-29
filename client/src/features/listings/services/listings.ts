@@ -1,8 +1,7 @@
 import { baseApi } from "@/services/baseApi"
 import { z } from "zod"
 import { jobListingSchema } from "../constants/constants"
-import { JobListing, JobListingFormValues } from "../constants/types"
-import { JOB_LISTING_DURATIONS } from "@backend/constants/types"
+import { JOB_LISTING_DURATIONS, JobListing, JobListingFormValues } from "../constants/types"
 
 export async function createJobListing(data: JobListingFormValues) {
   const res = await baseApi.post("/job-listings", data)

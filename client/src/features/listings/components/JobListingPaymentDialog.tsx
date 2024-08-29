@@ -1,7 +1,13 @@
 import { useState } from "react"
 import { Elements } from "@stripe/react-stripe-js"
 import { buttonVariants } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +17,14 @@ import {
 import { CheckoutForm } from "@/features/listings/components/CheckoutForm"
 import { stripePromise } from "@/lib/stripe"
 import { useTheme } from "@/hooks/useTheme"
-import { JOB_LISTING_DURATIONS } from "@backend/constants/types"
-import { getJobListingPriceInCents } from "@backend/utils/getJobListingPriceInCents"
-import { formatCurrency, getJobListingStatus, getPurchaseButtonText } from "../utils/listingUtils"
+import {
+  formatCurrency,
+  getJobListingPriceInCents,
+  getJobListingStatus,
+  getPurchaseButtonText,
+} from "../utils/listingUtils"
 import { createPublishPaymentIntent } from "../services/listings"
+import { JOB_LISTING_DURATIONS } from "../constants/types"
 
 type JobListingPaymentDialogProps = {
   id: string

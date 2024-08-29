@@ -19,12 +19,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { generatePreviewJobListingPlaceholders } from "../utils/listingUtils"
-import { JOB_LISTING_TYPES, JOB_LISTING_EXPERIENCE_LEVELS } from "@backend/constants/types"
-import { jobListingFormSchema } from "@backend/constants/schemas/jobListings"
 import { JobListingCard } from "./JobListingCard"
-import { JobListingFormValues } from "../constants/types"
+import { JOB_LISTING_EXPERIENCE_LEVELS, JOB_LISTING_TYPES, JobListingFormValues } from "../constants/types"
 import { useState } from "react"
 import { ViewMoreModal } from "./ViewMoreModal"
+import { jobListingFormSchema } from "../constants/constants"
 
 const DEFAULT_FORM_VALUES: JobListingFormValues = {
   title: "",

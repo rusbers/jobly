@@ -1,5 +1,5 @@
 import { differenceInDays, formatDistanceStrict, isAfter } from "date-fns"
-import { JobListing, JobListingFormValues } from "../constants/types"
+import { JOB_LISTING_DURATIONS, JobListing, JobListingFormValues } from "../constants/types"
 
 export function generatePreviewJobListingPlaceholders(currentListingValues: JobListingFormValues) {
   return {
@@ -55,4 +55,21 @@ export function formatCurrency(amount: number) {
     currency: "USD",
     maximumFractionDigits: 0,
   }).format(amount)
+}
+
+export function assertUnreachable(_x: never): never {
+  throw new Error("Didn't expect to get here")
+}
+
+export function getJobListingPriceInCents(duration: (typeof JOB_LISTING_DURATIONS)[number]) {
+  switch (duration) {
+    case 30:
+      return 10000
+    case 60:
+      return 17500
+    case 90:
+      return 22500
+    default:
+      assertUnreachable(duration)
+  }
 }

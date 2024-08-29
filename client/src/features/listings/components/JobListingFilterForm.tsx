@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { JOB_LISTING_EXPERIENCE_LEVELS, JOB_LISTING_TYPES } from "@backend/constants/types"
 import { UseFormReturn } from "react-hook-form"
 import { JobListingFormSelector } from "./JobListingForm"
 import { JobListingFilterFormValues } from "../hooks/useJobListingFilterForm"
+import { JOB_LISTING_EXPERIENCE_LEVELS, JOB_LISTING_TYPES } from "../constants/types"
 
 type JobListingFilterFormProps = {
   className?: string
